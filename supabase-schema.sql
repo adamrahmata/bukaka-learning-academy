@@ -34,3 +34,5 @@ create policy "live participants public insert" on public.live_participants for 
 create policy "live participants public update" on public.live_participants for update to anon, authenticated using (true) with check (true);
 alter table public.live_sessions replica identity full;
 alter table public.live_participants replica identity full;
+alter table public.live_sessions add column if not exists current_question integer not null default 0;
+alter table public.live_participants add column if not exists answered_question integer not null default -1;
