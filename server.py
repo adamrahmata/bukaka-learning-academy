@@ -69,7 +69,7 @@ class Handler(SimpleHTTPRequestHandler):
             session = sessions.get(str(data.get("token", "")))
             if not session:
                 return self.json_response({"error": "Token tidak ditemukan atau sesi sudah berakhir."}, 404)
-            participant = {"id": token(), "name": data.get("name", "Peserta"), "score": 0, "answered": False}
+            participant = {"id": token(), "name": data.get("name", "Peserta"), "avatar": data.get("avatar", "🦺"), "score": 0, "answered": False}
             session["participants"] = [p for p in session["participants"] if p["name"] != participant["name"]]
             session["participants"].append(participant)
             return self.json_response({"session": session, "participant": participant})

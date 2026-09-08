@@ -13,6 +13,7 @@ create table if not exists public.live_participants (
   id uuid primary key default gen_random_uuid(),
   session_id uuid not null references public.live_sessions(id) on delete cascade,
   name text not null,
+  avatar text not null default '🦺',
   score integer not null default 0,
   answered boolean not null default false,
   correct boolean not null default false,

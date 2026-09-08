@@ -16,7 +16,7 @@ window.supabaseLive = {
       const { data: session, error } = await supabaseClient.from("live_sessions").select("*,live_participants(*)").eq("token", data.token).single();
       if (error || !session) throw new Error("Token tidak ditemukan atau sesi sudah berakhir.");
       const { data: participant, error: participantError } = await supabaseClient.from("live_participants").upsert({
-        session_id: session.id, name: data.name
+        session_id: session.id, name: data.name, avatar: data.avatar || "🦺"
       }, { onConflict: "session_id,name" }).select().single();
       if (participantError) throw participantError;
       return { session: this.session(session), participant: this.participant(participant) };
@@ -33,6 +33,6 @@ window.supabaseLive = {
     }
     return this.session((await supabaseClient.from("live_sessions").select("*,live_participants(*)").eq("id", session.id).single()).data);
   },
-  participant(row) { return { id: row.id, name: row.name, score: row.score || 0, answered: row.answered || false }; },
+  participant(row) { return { id: row.id, name: row.name, avatar: row.avatar || "🦺", score: row.score || 0, answered: row.answered || false }; },
   session(row) { return { token: row.token, title: row.title, criterionId: row.criterion_id, host: row.host_name, status: row.status, startedAt: row.started_at, joinUrl: `${location.origin}${location.pathname}?join=${row.token}`, participants: (row.live_participants || []).map(this.participant) }; }
 };
